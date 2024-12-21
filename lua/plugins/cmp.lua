@@ -1,26 +1,26 @@
 return {
-  --blink
   {
     "saghen/blink.cmp",
-    version = "v0.*",
-    build = vim.g.lazyvim_blink_main and "cargo build --release",
-
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "L3MON4D3/LuaSnip",
       {
         "saghen/blink.compat",
         optional = true,
         opts = {},
         version = not vim.g.lazyvim_blink_main and "*",
       },
+      { "L3MON4D3/LuaSnip", version = "v2.*" },
     },
-
-    event = "InsertEnter",
-
+    version = "v0.*",
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
-      keymap = {
-        preset = "default",
+      keymap = { preset = "default" },
+
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer", "luasnip" },
+        -- optionally disable cmdline completions
+        -- cmdline = {},
       },
 
       snippets = {
@@ -38,18 +38,17 @@ return {
         end,
       },
 
-      highlight = {
-        -- supporting themes: tokyonight
-        -- not supported: nightfox
-        use_nvim_cmp_as_default = true,
-      },
-
       completion = {
         accept = { auto_brackets = { enabled = true } },
 
         menu = {
           border = "rounded",
-          draw = {},
+          draw = {
+            columns = {
+              { "label", "label_description", gap = 1 },
+              { "kind_icon", "kind" },
+            },
+          },
         },
 
         documentation = {
@@ -58,33 +57,18 @@ return {
             border = "rounded",
           },
         },
-      },
-      signature = {
-        enabled = true,
-        window = {
-          border = "rounded",
+
+        ghost_text = {
+          enabled = true,
         },
       },
 
-      sources = {
-        completion = {
-          enabled_providers = { "lsp", "path", "snippets", "buffer", "luasnip", "lazydev" },
-          providers = {
-            -- create provider
-            compat = {},
-            lazydev = {
-              name = "LazyDev",
-              module = "lazydev.integrations.blink",
-              score_offset = 100,
-            },
-          },
-        },
-      },
+      signature = { enabled = true, window = { border = "rounded" } },
 
       appearance = {
-        highlight_ns = vim.api.nvim_create_namespace("blink_cmp"),
-        use_nvim_cmp_as_default = false,
-        nerd_font_variant = "mono",
+        use_nvim_cmp_as_default = true,
+        nerd_font_variant = "normal",
+
         kind_icons = {
           Text = "󰉿",
           Method = "󰊕",
@@ -119,5 +103,6 @@ return {
         },
       },
     },
+    opts_extend = { "sources.default" },
   },
 }

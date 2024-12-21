@@ -1,4 +1,5 @@
 return {
+  -- bufferline
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
@@ -16,10 +17,13 @@ return {
     },
     opts = {
       options = {
-      -- stylua: ignore
-      close_command = function(n) Snacks.bufdelete(n) end,
-      -- stylua: ignore
-      right_mouse_command = function(n) Snacks.bufdelete(n) end,
+        separator_style = "thick",
+        close_command = function(n)
+          Snacks.bufdelete(n)
+        end,
+        right_mouse_command = function(n)
+          Snacks.bufdelete(n)
+        end,
         diagnostics = "nvim_lsp",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
@@ -54,13 +58,14 @@ return {
       })
     end,
   },
+  --smear-cursor
   {
     "sphamba/smear-cursor.nvim",
     event = "VeryLazy",
     cond = vim.g.neovide == nil,
     opts = {
       hide_target_hack = true,
-      cursor_color = "#10b4d3", -- Màu đỏ
+      cursor_color = "#10b4d3",
     },
     specs = {
       {
@@ -68,6 +73,40 @@ return {
         optional = true,
         opts = {
           cursor = { enable = false },
+        },
+      },
+    },
+  },
+  --noice
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      lsp = {
+        documentation = {
+          view = "hover",
+          opts = {
+            lang = "markdown",
+            replace = true,
+            render = "plain",
+            format = { "{message}" },
+            position = { row = 2, col = 2 },
+            size = {
+              max_width = math.floor(0.8 * vim.api.nvim_win_get_width(0)),
+              max_height = 15,
+            },
+            border = {
+              style = "rounded",
+            },
+            win_options = {
+              concealcursor = "n",
+              conceallevel = 3,
+              winhighlight = {
+                Normal = "CmpPmenu",
+                FloatBorder = "DiagnosticSignInfo",
+              },
+            },
+          },
         },
       },
     },
