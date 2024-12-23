@@ -58,7 +58,7 @@ return {
       })
     end,
   },
-  --smear-cursor
+  -- smear-cursor
   {
     "sphamba/smear-cursor.nvim",
     event = "VeryLazy",
@@ -77,7 +77,7 @@ return {
       },
     },
   },
-  --noice
+  -- noice
   {
     "folke/noice.nvim",
     event = "VeryLazy",

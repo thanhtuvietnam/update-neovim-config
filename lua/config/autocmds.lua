@@ -8,10 +8,10 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_autocmd("CursorHold", {
-  callback = function()
-    if not _G.disable_cursorhold then
-      vim.diagnostic.open_float(nil, { focusable = false, border = "rounded" })
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--   callback = function()
+--     if not _G.disable_cursorhold then
+--       vim.diagnostic.open_float(nil, { focusable = false, border = "rounded" })
+--     end
+--   end,
+-- })

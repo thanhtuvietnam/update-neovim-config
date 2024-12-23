@@ -63,7 +63,7 @@ return {
         },
       },
 
-      signature = { enabled = true, window = { border = "rounded" } },
+      signature = { enabled = false, window = { border = "rounded" } },
 
       appearance = {
         use_nvim_cmp_as_default = true,
