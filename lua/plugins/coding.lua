@@ -13,4 +13,13 @@ return {
       },
     },
   },
+  --NOTE: This plugin is for garabage collection
+  {
+    "zeioth/garbage-day.nvim",
+    dependencies = "neovim/nvim-lspconfig",
+    event = "VeryLazy",
+    opts = {
+      -- your options here
+    },
+  },
 }

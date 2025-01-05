@@ -3,21 +3,18 @@ return {
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
-    keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
-      { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
-      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
-      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
-      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-      { "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
-      { "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
-    },
     opts = {
       options = {
+        hover = {
+          enabled = true,
+          delay = 200,
+          reveal = { "close" },
+        },
+        themable = true,
+
+        mode = "buffers",
         separator_style = "thick",
+
         close_command = function(n)
           Snacks.bufdelete(n)
         end,
@@ -40,6 +37,7 @@ return {
             text_align = "left",
           },
         },
+        color_icons = true,
         ---@param opts bufferline.IconFetcherOpts
         get_element_icon = function(opts)
           return LazyVim.config.icons.ft[opts.filetype]
@@ -57,57 +55,49 @@ return {
         end,
       })
     end,
+    -- require("bufferline").setup({
+    --   highlights = {},
+    -- }),
   },
   -- smear-cursor
-  {
-    "sphamba/smear-cursor.nvim",
-    event = "VeryLazy",
-    cond = vim.g.neovide == nil,
-    opts = {
-      hide_target_hack = true,
-      cursor_color = "#10b4d3",
-    },
-    specs = {
-      {
-        "echasnovski/mini.animate",
-        optional = true,
-        opts = {
-          cursor = { enable = false },
-        },
-      },
-    },
-  },
+  -- {
+  --   "sphamba/smear-cursor.nvim",
+  --   event = "VeryLazy",
+  --   cond = vim.g.neovide == nil,
+  --   opts = {
+  --     hide_target_hack = true,
+  --     cursor_color = "#10b4d3",
+  --   },
+  --   specs = {
+  --     {
+  --       "echasnovski/mini.animate",
+  --       optional = true,
+  --       opts = {
+  --         cursor = { enable = false },
+  --       },
+  --     },
+  --   },
+  -- },
   -- noice
   {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
       lsp = {
-        documentation = {
-          view = "hover",
-          opts = {
-            lang = "markdown",
-            replace = true,
-            render = "plain",
-            format = { "{message}" },
-            position = { row = 2, col = 2 },
-            size = {
-              max_width = math.floor(0.8 * vim.api.nvim_win_get_width(0)),
-              max_height = 15,
-            },
-            border = {
-              style = "rounded",
-            },
-            win_options = {
-              concealcursor = "n",
-              conceallevel = 3,
-              winhighlight = {
-                Normal = "CmpPmenu",
-                FloatBorder = "DiagnosticSignInfo",
-              },
-            },
-          },
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
         },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = true, -- use a classic bottom cmdline for search
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = true, -- add a border to hover docs and signature help
       },
     },
   },
