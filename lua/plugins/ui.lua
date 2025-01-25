@@ -1,5 +1,5 @@
 return {
-  -- bufferline
+  --NOTE: bufferline
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
@@ -59,26 +59,7 @@ return {
     --   highlights = {},
     -- }),
   },
-  -- smear-cursor
-  -- {
-  --   "sphamba/smear-cursor.nvim",
-  --   event = "VeryLazy",
-  --   cond = vim.g.neovide == nil,
-  --   opts = {
-  --     hide_target_hack = true,
-  --     cursor_color = "#10b4d3",
-  --   },
-  --   specs = {
-  --     {
-  --       "echasnovski/mini.animate",
-  --       optional = true,
-  --       opts = {
-  --         cursor = { enable = false },
-  --       },
-  --     },
-  --   },
-  -- },
-  -- noice
+  --NOTE: noice
   {
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -99,6 +80,16 @@ return {
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = true, -- add a border to hover docs and signature help
       },
+    },
+  },
+  --NOTE: oklch-color-picker
+  {
+    "eero-lehtinen/oklch-color-picker.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      -- One handed keymap recommended, you will be using the mouse
+      { "<leader>v", "<cmd>ColorPickOklch<cr>", desc = "Color pick under cursor" },
     },
   },
 }

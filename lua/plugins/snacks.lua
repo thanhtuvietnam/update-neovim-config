@@ -1,9 +1,75 @@
 return {
   {
     "folke/snacks.nvim",
-    ---@type table
+    priority = 1000,
+    lazy = false,
     opts = {
-      bigfile = {},
+      --NOTE: Cấu hình cho các module
+      bigfile = { enabled = true },
+      input = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scroll = { enabled = true },
+
+      --NOTE: Cấu hình cho module terminal
+      terminal = {
+        win = {
+          border = "rounded",
+          style = "float",
+          width = 0.8,
+          height = 0.8,
+        },
+      },
+      --NOTE: Cấu hình cho module indent
+      indent = {
+        priority = 1,
+        enabled = true,       -- enable indent guides
+        char = "│",
+        only_scope = false,   -- only show indent guides of the scope
+        only_current = false, -- only show indent guides in the current window
+        hl = "SnacksIndent", ---@type string|string[] hl groups for indent guides
+        -- hl = {
+        --   "SnacksIndent1",
+        --   "SnacksIndent2",
+        --   "SnacksIndent3",
+        --   "SnacksIndent4",
+        --   "SnacksIndent5",
+        --   "SnacksIndent6",
+        --   "SnacksIndent7",
+        --   "SnacksIndent8",
+        -- },
+        animate = {
+          enabled = vim.fn.has("nvim-0.10") == 1,
+          style = "out",
+          easing = "linear",
+          duration = {
+            step = 10,   -- ms per step
+            total = 200, -- maximum duration
+          },
+        },
+        scope = {
+          enabled = true, -- enable highlighting the current scope
+          priority = 200,
+          char = "│",
+          underline = true,     -- underline the start of the scope
+          only_current = false, -- only show scope in the current window
+          hl = "SnacksIndentScope", ---@type string|string[] hl group for scopes
+        },
+        blank = {
+          -- char = " ",
+          char = "·",
+          hl = "SnacksIndentBlank", ---@type string|string[] hl group for blank spaces
+        },
+        filter = function(buf)
+          return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
+        end,
+      },
+
+      statuscolumn = { enabled = true },
+
+      words = { enabled = true },
+
+      --NOTE: Cấu hình cho dashboard
       dashboard = {
         width = 80,
         row = nil,
@@ -17,69 +83,33 @@ return {
    ██║    ╚████╔╝ ██║     █████╗  ██████╔╝    ██║     ██║   ██║██║   ██║
    ██║     ╚██╔╝  ██║     ██╔══╝  ██╔══██╗    ██║     ██║   ██║██║   ██║
    ██║      ██║   ███████╗███████╗██║  ██║    ███████╗╚██████╔╝╚██████╔╝
-   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝  ╚═════╝ 
+   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝  ╚═════╝
           ]],
         },
       },
-      indent = {
-        priority = 1,
-        enabled = true, -- Bật hướng dẫn thụt lề
-        char = "│", -- Ký tự hiển thị cho hướng dẫn thụt lề
-        only_scope = false, -- Chỉ hiển thị hướng dẫn thụt lề của phạm vi hiện tại
-        only_current = false, -- Chỉ hiển thị hướng dẫn thụt lề trong cửa sổ hiện tại
-        hl = "SnacksIndent", -- Nhóm highlight cho hướng dẫn thụt lề
-        -- Có thể là danh sách các nhóm highlight để luân phiên
-        -- hl = {
-        --     "SnacksIndent1",
-        --     "SnacksIndent2",
-        --     "SnacksIndent3",
-        --     "SnacksIndent4",
-        --     "SnacksIndent5",
-        --     "SnacksIndent6",
-        --     "SnacksIndent7",
-        --     "SnacksIndent8",
-        -- },
-        animate = {
-          enabled = vim.fn.has("nvim-0.10") == 1,
-          style = "out",
-          easing = "linear", -- Kiểu easing cho hoạt ảnh
-          duration = {
-            step = 20, -- ms mỗi bước
-            total = 500, -- Thời gian tối đa
-          },
-        },
-        scope = {
-          enabled = true, -- Bật highlight cho phạm vi hiện tại
-          priority = 200,
-          char = "│", -- Ký tự hiển thị cho phạm vi
-          underline = true, -- Gạch chân bắt đầu của phạm vi
-          only_current = true, -- Chỉ hiển thị phạm vi trong cửa sổ hiện tại
-          hl = "SnacksIndentScope", -- Nhóm highlight cho phạm vi
-        },
-        blank = {
-          char = " ", -- Ký tự khoảng trắng
-          -- char = "·",
-          hl = "SnacksIndentBlank", -- Nhóm highlight cho khoảng trắng
-        },
-        -- Bộ lọc cho các buffer để bật hướng dẫn thụt lề
-        filter = function(buf)
-          return vim.g.snacks_indent ~= false and vim.b[buf].snacks_indent ~= false and vim.bo[buf].buftype == ""
+    },
+
+    --NOTE: Cấu hình các phím tắt
+    keys = {
+      {
+        "<leader>N",
+        desc = "Neovim News",
+        function()
+          Snacks.win({
+            file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+            width = 0.6,
+            height = 0.6,
+            border = "rounded",
+            wo = {
+              spell = false,
+              wrap = false,
+              signcolumn = "yes",
+              statuscolumn = " ",
+              conceallevel = 3,
+            },
+          })
         end,
       },
-      input = {},
-      notifier = {},
-      quickfile = {},
-      scroll = {},
-      terminal = {
-        win = {
-          style = "float",
-          border = "rounded",
-          width = 0.8,
-          height = 0.8,
-        },
-      },
-      statuscolumn = { enabled = true },
-      words = {},
     },
   },
 }

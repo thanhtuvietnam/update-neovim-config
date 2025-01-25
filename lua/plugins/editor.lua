@@ -1,1 +1,3 @@
-return { nil }
+return {
+  { "nvim-lualine/lualine.nvim", }
+}

@@ -2,9 +2,10 @@ return {
   {
     "williamboman/mason.nvim",
     requires = {
-      "williamboman/mason-lspconfig.nvim", -- Đảm bảo cài đặt mason-lspconfig nếu bạn sử dụng LSP
-      "neovim/nvim-lspconfig", -- Đảm bảo cài đặt nvim-lspconfig nếu bạn sử dụng LSP
+      "williamboman/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
     },
+    --NOTE: mason border setup
     config = function()
       require("mason").setup({
         ui = {
@@ -18,6 +19,7 @@ return {
       })
     end,
   },
+  -- NOTE: nvim-lspconfig
   {
     "neovim/nvim-lspconfig",
     event = "LazyFile",
@@ -27,10 +29,10 @@ return {
     },
     opts = function()
       ---@class PluginLspOpts
-
       local ret = {
         -- options for vim.diagnostic.config()
         ---@type vim.diagnostic.Opts
+        ---
         diagnostics = {
           underline = true,
           update_in_insert = false,
@@ -40,6 +42,9 @@ return {
           --   source = "if_many",
           --   prefix = "●",
           -- },
+          float = {
+            border = "rounded",
+          },
           severity_sort = true,
           signs = {
             text = {
@@ -50,20 +55,14 @@ return {
             },
           },
         },
-        -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-        -- Be aware that you also will need to properly configure your LSP server to
-        -- provide the inlay hints.
+
         inlay_hints = {
           enabled = true,
           exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
         },
-        -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
-        -- Be aware that you also will need to properly configure your LSP server to
-        -- provide the code lenses.
         codelens = {
-          enabled = false,
+          enabled = true,
         },
-        -- add any global capabilities here
         capabilities = {
           workspace = {
             fileOperations = {
@@ -72,9 +71,7 @@ return {
             },
           },
         },
-        -- options for vim.lsp.buf.format
-        -- `bufnr` and `filter` is handled by the LazyVim formatter,
-        -- but can be also overridden when specified
+
         format = {
           formatting_options = nil,
           timeout_ms = nil,
@@ -83,13 +80,21 @@ return {
         ---@type lspconfig.options
         servers = {
           eslint = {},
+          clangd = {},
+          cssls = {
+            settings = {
+              css = { validate = true, lint = {
+                unknownAtRules = "ignore",
+              } },
+              scss = { validate = true, lint = {
+                unknownAtRules = "ignore",
+              } },
+              less = { validate = true, lint = {
+                unknownAtRules = "ignore",
+              } },
+            },
+          },
           lua_ls = {
-            -- mason = false, -- set to false if you don't want this server to be installed with mason
-            -- Use this to add any additional keymaps
-            -- for specific lsp servers
-            -- ---@type LazyKeysSpec[]
-            -- keys = {},
-            clangd = {},
             settings = {
               Lua = {
                 workspace = {
@@ -142,6 +147,12 @@ return {
         },
       }
 
+      local Keys = require("lazyvim.plugins.lsp.keymaps").get()
+
+      vim.list_extend(Keys, {
+        { "gr", "<Nop>" },
+        { "gI", "<Nop>" },
+      })
       return ret
     end,
   },
